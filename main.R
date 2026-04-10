@@ -67,12 +67,12 @@ sd_tx <- sd(df_ts$Total_Transactions, na.rm = TRUE)
 df_ts <- df_ts %>%
     mutate(
         Z_Score = (Total_Transactions - mean_tx) / sd_tx,
-        Is_Anomaly = ifelse(Z_Score > 3 | Z_Score < -3, "Anomali", "Normal")
+        Is_Anomaly = ifelse(Z_Score > 1.3 | Z_Score < -1.3, "Anomali", "Normal")
     )
 
-# Menghitung batas jumlah transaksi di Z-Score = 3 untuk digambarkan sebagai garis
-upper_bound <- mean_tx + 3 * sd_tx
-lower_bound <- mean_tx - 3 * sd_tx
+# Menghitung batas jumlah transaksi di Z-Score = 1.3 untuk digambarkan sebagai garis
+upper_bound <- mean_tx + 1.3 * sd_tx
+lower_bound <- mean_tx - 1.3 * sd_tx
 
 # Visualisasi Anomali dengan Z-score
 plot_anomaly <- ggplot(df_ts, aes(x = Hour, y = Total_Transactions)) +
@@ -80,6 +80,8 @@ plot_anomaly <- ggplot(df_ts, aes(x = Hour, y = Total_Transactions)) +
     geom_point(aes(color = Is_Anomaly, size = Is_Anomaly)) +
     # Tambahkan garis merah putus-putus untuk menandakan batas anomali atas
     geom_hline(yintercept = upper_bound, color = "red", linetype = "dashed", alpha = 0.6) +
+    # Tambahkan garis merah putus-putus untuk menandakan batas anomali bawah
+    geom_hline(yintercept = lower_bound, color = "red", linetype = "dashed", alpha = 0.6) +
     # Tambahkan teks tepat di atas titik yang terdeteksi Anomali
     geom_text(data = filter(df_ts, Is_Anomaly == "Anomali"),
               aes(label = paste0("Jam ", Hour)), 
@@ -88,7 +90,7 @@ plot_anomaly <- ggplot(df_ts, aes(x = Hour, y = Total_Transactions)) +
     scale_size_manual(values = c("Anomali" = 3, "Normal" = 1)) +
     labs(
         title = "Deteksi Anomali Volume Transaksi",
-        subtitle = "Garis putus-putus merah melambangkan batas anomali tinggi (Z-Score = 3)",
+        subtitle = "Garis putus-putus merah melambangkan batas anomali (Z-Score = ±1.3)",
         x = "Jam ke-",
         y = "Jumlah Transaksi"
     ) +

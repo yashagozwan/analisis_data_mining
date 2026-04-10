@@ -2,3 +2,5 @@ datasets/*.csv
 *.RData
 *.Rhistory
 *.Rout
+.idea/
+Rplots.pdf
