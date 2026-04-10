@@ -90,7 +90,7 @@ plot_anomaly <- ggplot(df_ts, aes(x = Hour, y = Total_Transactions)) +
     scale_size_manual(values = c("Anomali" = 3, "Normal" = 1)) +
     labs(
         title = "Deteksi Anomali Volume Transaksi",
-        subtitle = "Garis putus-putus merah melambangkan batas anomali (Z-Score = ±1.3)",
+        subtitle = "Garis putus-putus merah melambangkan batas anomali (Z-Score = +/- 1.3)",
         x = "Jam ke-",
         y = "Jumlah Transaksi"
     ) +
